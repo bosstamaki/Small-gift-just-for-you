@@ -1,0 +1,1592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Valentine's Day</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow: hidden;
+            font-family: 'Georgia', serif;
+        }
+
+        #container {
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle, #1a1a1a 0%, #000000 100%);
+            position: relative;
+        }
+
+        #container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 50% 50%, transparent 20%, rgba(254, 120, 120, 0.5) 20%, rgba(254, 120, 120, 0.5) 28%, transparent 28%),
+                radial-gradient(circle at 50% 50%, transparent 40%, rgba(254, 120, 120, 0.45) 40%, rgba(254, 120, 120, 0.45) 48%, transparent 48%),
+                radial-gradient(circle at 50% 50%, transparent 60%, rgba(254, 120, 120, 0.35) 60%, rgba(254, 120, 120, 0.35) 68%, transparent 68%),
+                radial-gradient(circle at 50% 50%, transparent 80%, rgba(254, 120, 120, 0.25) 80%, rgba(254, 120, 120, 0.25) 88%, transparent 88%),
+                radial-gradient(circle, #ff5050 0%, #cc0000 100%);
+            clip-path: circle(0% at 50% 50%);
+            transition: clip-path 3s ease-out;
+            pointer-events: none;
+        }
+
+        #container.red-bg::before {
+            clip-path: circle(150% at 50% 50%);
+        }
+
+        #viewport {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #scene {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: transform 3s ease-out;
+        }
+
+        /* Flowerpot */
+        .flowerpot {
+            width: 120px;
+            height: 80px;
+            background: linear-gradient(to bottom, #8B4513 0%, #654321 100%);
+            position: relative;
+            clip-path: polygon(15% 0%, 85% 0%, 100% 100%, 0% 100%);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .flowerpot:hover {
+            transform: scale(1.05);
+        }
+
+        /* Click me text */
+        .click-text {
+            position: absolute;
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            opacity: 0;
+            white-space: nowrap;
+            pointer-events: none;
+            animation: fadeIn 1s ease-in forwards;
+            animation-delay: 2s;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .click-text.pot-click {
+            bottom: 90px;
+            left: 140px;
+            z-index: 5;
+        }
+
+        .click-text.rose-click {
+            position: fixed !important;
+            top: 50% !important;
+            right: 20% !important;
+            transform: translateY(-50%) !important;
+            pointer-events: none !important;
+            z-index: 1 !important;
+        }
+
+        .flowerpot::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 15%;
+            right: 15%;
+            height: 10px;
+            background: #654321;
+            border-radius: 5px 5px 0 0;
+        }
+
+        .soil {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background: #3d2817;
+            clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+        }
+
+        /* Seedling */
+        .seedling {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            cursor: pointer;
+        }
+
+        .stem {
+            width: 7px;
+            height: 20px;
+            background: linear-gradient(to top, #2d5016 0%, #4a7c2c 100%);
+            position: relative;
+            margin: 0 auto;
+            transform-origin: bottom;
+        }
+
+        .leaf {
+            width: 20px;
+            height: 12px;
+            background: #4a7c2c;
+            border-radius: 0 50% 50% 0;
+            position: absolute;
+        }
+
+        .leaf.left {
+            left: -18px;
+            transform: rotate(-45deg);
+        }
+
+        .leaf.right {
+            right: -18px;
+            transform: rotate(45deg) scaleX(-1);
+        }
+
+        .leaf-1 {
+            bottom: 10px;
+        }
+
+        /* Growing stem */
+        .stem.growing {
+            animation: growStem 2s ease-out forwards;
+        }
+
+        @keyframes growStem {
+            to {
+                height: 120px;
+            }
+        }
+
+        /* Rose bud */
+        .bud {
+            width: 15px;
+            height: 20px;
+            background: linear-gradient(to bottom, #e24f5f 0%, #c22887 100%);
+            border-radius: 50% 50% 45% 45%;
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+        }
+
+        .bud.show {
+            animation: showBud 0.5s ease forwards;
+        }
+
+        @keyframes showBud {
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Rose flower - should match floating roses exactly */
+        .rose {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            cursor: pointer;
+            pointer-events: auto;
+            z-index: 10;
+            /* DEBUG: Uncomment to see clickable area */
+            /* border: 2px solid yellow; */
+            /* background: rgba(255, 255, 0, 0.2); */
+        }
+
+        .rose.bloom {
+            animation: bloomRose 1.5s ease forwards;
+        }
+
+        @keyframes bloomRose {
+            0% {
+                opacity: 0;
+                transform: translateX(-50%) scale(0.3);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(-50%) scale(1);
+            }
+        }
+
+        /* Main rose petals - IDENTICAL to floating rose sizes */
+        .rose .flower__leaf {
+            width: 3vmin;
+            height: 8vmin;
+        }
+
+        .rose .flower__leaf--1 {
+            width: 5vmin;
+            height: 6vmin;
+            bottom: 2vmin;
+        }
+
+        .flower__leaf {
+            position: absolute;
+            left: 50%;
+            bottom: 2vmin;
+            transform: translateX(-50%);
+            width: 5vmin;
+            height: 14vmin;
+            background-image: linear-gradient(to bottom, #ffa085, #fa7373, #1a233a 99%);
+            clip-path: ellipse(50% 50% at 50% 50%);
+            transform-origin: center bottom;
+            animation: open-flower 2s 1s backwards;
+        }
+
+        @keyframes open-flower {
+            0% {
+                transform: translateX(-50%) rotate(0);
+            }
+        }
+
+        .flower__leaf--1 {
+            width: 10vmin;
+            height: 12vmin;
+            bottom: 3vmin;
+            border-radius: 50% 50% 50% 50% / 80% 80% 20% 20%;
+            background-color: #e24f5f;
+            background-image: none;
+            animation: open-flower-middle 1.4s 1s backwards;
+        }
+
+        @keyframes open-flower-middle {
+            0% {
+                opacity: 0;
+                transform: translateX(-50%) scale(0);
+            }
+        }
+
+        .flower__leaf--2 {
+            transform: translateX(-50%) rotate(-45deg);
+        }
+
+        .flower__leaf--3 {
+            transform: translateX(-50%) rotate(-75deg);
+        }
+
+        .flower__leaf--4 {
+            transform: translateX(-50%) rotate(-105deg);
+        }
+
+        .flower__leaf--5 {
+            transform: translateX(-50%) rotate(45deg);
+        }
+
+        .flower__leaf--6 {
+            transform: translateX(-50%) rotate(75deg);
+        }
+
+        .flower__leaf--7 {
+            transform: translateX(-50%) rotate(105deg);
+        }
+
+        /* Scissors */
+        .scissors {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            opacity: 0;
+            z-index: 100;
+        }
+
+        .scissors.appear {
+            animation: scissorsAppear 1s ease forwards;
+        }
+
+        @keyframes scissorsAppear {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .scissors.cutting {
+            animation: scissorsCut 0.5s ease;
+        }
+
+        @keyframes scissorsCut {
+            0%, 100% {
+                transform: rotate(0deg);
+            }
+            50% {
+                transform: rotate(-15deg);
+            }
+        }
+
+        .blade {
+            position: absolute;
+            width: 35px;
+            height: 8px;
+            background: linear-gradient(to right, #b0b0b0 0%, #e0e0e0 50%, #b0b0b0 100%);
+            border-radius: 0 4px 4px 0;
+        }
+
+        .blade:nth-child(1) {
+            top: 20px;
+            left: 10px;
+            transform-origin: left center;
+            animation: bladeOpen1 0.5s ease infinite alternate;
+        }
+
+        .blade:nth-child(2) {
+            top: 32px;
+            left: 10px;
+            transform-origin: left center;
+            animation: bladeOpen2 0.5s ease infinite alternate;
+        }
+
+        @keyframes bladeOpen1 {
+            from {
+                transform: rotate(-10deg);
+            }
+            to {
+                transform: rotate(-5deg);
+            }
+        }
+
+        @keyframes bladeOpen2 {
+            from {
+                transform: rotate(10deg);
+            }
+            to {
+                transform: rotate(5deg);
+            }
+        }
+
+        .handle {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: #ff6b6b;
+            border-radius: 50%;
+            border: 2px solid #333;
+        }
+
+        .handle:nth-child(3) {
+            top: 15px;
+            left: 5px;
+        }
+
+        .handle:nth-child(4) {
+            top: 30px;
+            left: 5px;
+        }
+
+        /* Floating rose for bouquet */
+        .floating-rose {
+            position: absolute;
+            width: 60px;
+            height: 120px;
+            opacity: 0;
+        }
+
+        .floating-rose .rose-head {
+            width: 50px;
+            height: 50px;
+            position: relative;
+            margin: 0 auto;
+            z-index: 2;
+        }
+
+        .floating-rose .flower__leaf {
+            width: 3vmin;
+            height: 8vmin;
+            animation: none !important;
+        }
+
+        .floating-rose .flower__leaf--1 {
+            width: 5vmin;
+            height: 6vmin;
+            bottom: 2vmin;
+            animation: none !important;
+        }
+
+        .floating-rose .flower__leaf--2 {
+            transform: translateX(-50%) rotate(-45deg);
+        }
+
+        .floating-rose .flower__leaf--3 {
+            transform: translateX(-50%) rotate(-75deg);
+        }
+
+        .floating-rose .flower__leaf--4 {
+            transform: translateX(-50%) rotate(-105deg);
+        }
+
+        .floating-rose .flower__leaf--5 {
+            transform: translateX(-50%) rotate(45deg);
+        }
+
+        .floating-rose .flower__leaf--6 {
+            transform: translateX(-50%) rotate(75deg);
+        }
+
+        .floating-rose .flower__leaf--7 {
+            transform: translateX(-50%) rotate(105deg);
+        }
+
+        .floating-rose .mini-stem {
+            width: 10px;
+            height: 150px;
+            background: linear-gradient(to top, #2d5016 0%, #4a7c2c 100%);
+            margin: -20px auto 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Center flower keeps shorter stem */
+        .floating-rose.center-flower .mini-stem {
+            height: 80px;
+        }
+
+        /* Bouquet wrapper */
+        .bouquet-wrapper {
+            position: absolute;
+            width: 280px;
+            height: 300px;
+            bottom: -350px;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+        }
+
+        .bouquet-wrapper.rise {
+            animation: bouquetRise 2s ease forwards;
+        }
+
+        @keyframes bouquetRise {
+            to {
+                bottom: 15vh;
+                opacity: 1;
+            }
+        }
+
+        /* Back layer - behind flowers */
+        .bouquet-back {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 280px;
+            height: 180px;
+            z-index: 1;
+        }
+
+        .bouquet-back::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%) rotate(-15deg);
+            width: 140px;
+            height: 180px;
+            background: linear-gradient(to bottom right, #9A7B5D 0%, #8B6F4F 100%);
+            clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+            border-right: 2px solid #7a5f3f;
+        }
+
+        .bouquet-back::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%) rotate(15deg);
+            width: 140px;
+            height: 180px;
+            background: linear-gradient(to bottom left, #8B7355 0%, #7a6345 100%);
+            clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+            border-left: 2px solid #6a5335;
+        }
+
+        .back-flap-left {
+            position: absolute;
+            bottom: 0;
+            left: 15%;
+            transform: translateX(-50%) rotate(-35deg);
+            width: 110px;
+            height: 170px;
+            background: linear-gradient(to bottom right, #8B6F4F 0%, #7a5f3f 100%);
+            clip-path: polygon(50% 8%, 100% 100%, 15% 100%);
+            z-index: 1;
+        }
+
+        .back-flap-right {
+            position: absolute;
+            bottom: 0;
+            right: 15%;
+            transform: translateX(50%) rotate(35deg);
+            width: 110px;
+            height: 170px;
+            background: linear-gradient(to bottom left, #7a6345 0%, #6a5335 100%);
+            clip-path: polygon(50% 8%, 85% 100%, 0% 100%);
+            z-index: 1;
+        }
+
+        /* Front layer - in front of flowers */
+        .bouquet-front {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 280px;
+            height: 180px;
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        .bouquet-front::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%) rotate(-15deg);
+            width: 140px;
+            height: 180px;
+            background: linear-gradient(to bottom right, #C19A6B 0%, #B8936D 100%);
+            clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+            border-right: 2px solid #a0826d;
+        }
+
+        .bouquet-front::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%) rotate(15deg);
+            width: 140px;
+            height: 180px;
+            background: linear-gradient(to bottom left, #B8936D 0%, #A0826D 100%);
+            clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+            border-left: 2px solid #8B7355;
+        }
+
+        .front-flap-left {
+            position: absolute;
+            bottom: 0;
+            left: 20%;
+            transform: translateX(-50%) rotate(-25deg);
+            width: 100px;
+            height: 160px;
+            background: linear-gradient(to bottom right, #D4AF8A 0%, #C19A6B 100%);
+            clip-path: polygon(50% 12%, 100% 100%, 25% 100%);
+            z-index: 100;
+        }
+
+        .front-flap-right {
+            position: absolute;
+            bottom: 0;
+            right: 20%;
+            transform: translateX(50%) rotate(25deg);
+            width: 100px;
+            height: 160px;
+            background: linear-gradient(to bottom left, #C19A6B 0%, #B8936D 100%);
+            clip-path: polygon(50% 12%, 75% 100%, 0% 100%);
+            z-index: 100;
+        }
+
+        .ribbon {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 160px;
+            height: 30px;
+            background: linear-gradient(to bottom, #f5f5dc 0%, #e8e8d0 100%);
+            z-index: 101;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            border-radius: 3px;
+        }
+
+        .ribbon::before,
+        .ribbon::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            width: 0;
+            height: 0;
+            border-style: solid;
+        }
+
+        .ribbon::before {
+            left: 10%;
+            border-width: 30px 0 0 25px;
+            border-color: transparent transparent transparent #e8e8d0;
+        }
+
+        .ribbon::after {
+            right: 10%;
+            border-width: 30px 25px 0 0;
+            border-color: transparent #e8e8d0 transparent transparent;
+        }
+
+        /* Message */
+        .message {
+            position: absolute;
+            top: 15vh;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 48px;
+            color: #fff;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            white-space: nowrap;
+            font-weight: bold;
+        }
+
+        .message.show {
+            animation: messageAppear 2s ease forwards;
+        }
+
+        @keyframes messageAppear {
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Bouquet movement */
+        .bouquet-container {
+            transition: transform 2s ease;
+        }
+
+        .bouquet-container.move-down {
+            transform: translateY(40vh);
+        }
+
+        /* Letter box */
+        .letter-box {
+            position: absolute;
+            top: 30vh;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            max-width: 700px;
+            max-height: 50vh;
+            background: rgba(180, 50, 50, 0.35);
+            border-radius: 30px;
+            padding: 40px;
+            opacity: 0;
+            overflow-y: auto;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            pointer-events: none;
+        }
+
+        .letter-box.show {
+            animation: letterAppear 1.5s ease forwards;
+            pointer-events: auto;
+        }
+
+        @keyframes letterAppear {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .letter-text {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 18px;
+            color: #ffffff;
+            text-align: justify;
+            line-height: 1.8;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .letter-text p {
+            margin-bottom: 20px;
+        }
+
+        /* Additional leaves for growing stem */
+        .dynamic-leaf {
+            width: 25px;
+            height: 15px;
+            background: #4a7c2c;
+            border-radius: 0 50% 50% 0;
+            position: absolute;
+            opacity: 0;
+        }
+
+        .dynamic-leaf.show {
+            animation: leafGrow 0.5s ease forwards;
+        }
+
+        @keyframes leafGrow {
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Rain cloud */
+        .rain-cloud {
+            position: absolute;
+            top: -100px;
+            left: -150px;
+            width: 100px;
+            height: 40px;
+            background: #b0c4de;
+            border-radius: 50px;
+            z-index: 10;
+        }
+
+        .rain-cloud::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            width: 40px;
+            height: 40px;
+            background: #b0c4de;
+            border-radius: 50%;
+        }
+
+        .rain-cloud::after {
+            content: '';
+            position: absolute;
+            top: 5px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: #8fa9c4;
+            border-radius: 50%;
+        }
+
+        .rain-cloud.pan-in {
+            animation: cloudPanIn 1.5s ease-out forwards;
+        }
+
+        .rain-cloud.pan-out {
+            animation: cloudPanOut 1.5s ease-in forwards;
+        }
+
+        @keyframes cloudPanIn {
+            to {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+
+        @keyframes cloudPanOut {
+            from {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            to {
+                left: calc(100% + 150px);
+                transform: translateX(0);
+            }
+        }
+
+        /* Raindrops */
+        .raindrop {
+            position: absolute;
+            top: 30px;
+            width: 2px;
+            height: 15px;
+            background: linear-gradient(to bottom, rgba(173, 216, 230, 0.8), rgba(173, 216, 230, 0));
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            opacity: 0;
+        }
+
+        .rain-cloud.raining .raindrop {
+            animation: rainFall 0.8s linear infinite;
+        }
+
+        .raindrop:nth-child(1) {
+            left: 20%;
+            animation-delay: 0s;
+        }
+
+        .raindrop:nth-child(2) {
+            left: 35%;
+            animation-delay: 0.1s;
+        }
+
+        .raindrop:nth-child(3) {
+            left: 50%;
+            animation-delay: 0.2s;
+        }
+
+        .raindrop:nth-child(4) {
+            left: 65%;
+            animation-delay: 0.15s;
+        }
+
+        .raindrop:nth-child(5) {
+            left: 80%;
+            animation-delay: 0.25s;
+        }
+
+        @keyframes rainFall {
+            0% {
+                opacity: 0;
+                transform: translateY(0);
+            }
+            10% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(100px);
+            }
+        }
+
+        /* Bowtie */
+        .bowtie {
+            position: absolute;
+            width: 80px;
+            height: 40px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            z-index: 200;
+        }
+
+        .bowtie.show {
+            animation: bowtieAppear 0.8s ease forwards;
+        }
+
+        @keyframes bowtieAppear {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .bowtie-left {
+            position: absolute;
+            width: 30px;
+            height: 35px;
+            background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+            border-radius: 50% 0 50% 0;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%) rotate(-10deg);
+        }
+
+        .bowtie-right {
+            position: absolute;
+            width: 30px;
+            height: 35px;
+            background: linear-gradient(135deg, #fafafa 0%, #f0f0f0 100%);
+            border-radius: 0 50% 0 50%;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%) rotate(10deg);
+        }
+
+        .bowtie-knot {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(to bottom, #ffffff 0%, #eeeeee 100%);
+            border-radius: 3px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .bowtie-ribbon {
+            position: absolute;
+            width: 8px;
+            height: 30px;
+            background: linear-gradient(to bottom, #ffffff 0%, #f5f5f5 100%);
+            left: 50%;
+            top: 100%;
+            transform: translateX(-50%);
+        }
+
+        .bowtie-ribbon:nth-child(4) {
+            transform: translateX(-50%) rotate(-8deg);
+        }
+
+        .bowtie-ribbon:nth-child(5) {
+            transform: translateX(-50%) rotate(8deg);
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="viewport">
+            <div id="scene">
+                <div class="flowerpot" id="flowerpot">
+                    <div class="soil"></div>
+                </div>
+                <div class="seedling" id="seedling">
+                    <div class="stem" id="stem">
+                        <div class="leaf left leaf-1"></div>
+                        <div class="leaf right leaf-1"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="click-text pot-click" id="potClickText">click the pot</div>
+        </div>
+        
+        <div class="message" id="message">Happy Valentines, Lalove</div>
+        
+        <div class="letter-box" id="letterBox">
+            <div class="letter-text">
+                <p>Hi Lalove, happy Valentine's Day.</p>
+                
+                <p>I know this year I wasn't able to give you something nice, and I'm really sorry about that. The past few weeks have been heavy with bills especially with the donuts and jersey, and I just couldn't save enough. I wish I could've handed you something tangible, something you could hold and say, "He thought of me." But please know that even if my hands are empty, my heart isn't. It's full of you. Always has been.</p>
+                
+                <p>Next year, I promise I'll make it up to you. Not just with gifts, but with effort, with time, with moments you'll remember. I don't want to just give you things, I want to give you memories. The kind we'll laugh about years from now.</p>
+                
+                <p>Thank you for staying. Thank you for choosing me even when I'm difficult, even when I fall short. I know I'm not perfect. I know I've made you cry, I've made you mad, and sometimes I've made you feel like I wasn't enough. For all of that, I'm truly sorry. You deserve softness, patience, reassurance. You deserve someone who makes you feel safe and loved every single day.</p>
+                
+                <p>I'm still learning. I'm still growing. But I promise you, I am trying. I want to become better, not just for myself, but for us. For our future. For the kind of love we talk about at 2 a.m. when everything feels quiet and honest.
+Please continue walking beside me. Support me the way I will always support you. Let's keep building something steady, something real. Not perfect, but ours.</p>
+                
+                <p>I love you very, very much, Lalove. More than I can properly put into words. Happy Valentine's Day. ❤️</p>
+            </div>
+        </div>
+        
+        <!-- Background Music -->
+        <audio id="bgMusic" loop>
+            <source src="YourLoveBGM.mp3" type="audio/mpeg">
+        </audio>
+    </div>
+
+    <script>
+        let animationState = 'initial'; // initial, growing, bloomed, bouquet
+        const flowerpot = document.getElementById('flowerpot');
+        const seedling = document.getElementById('seedling');
+        const stem = document.getElementById('stem');
+        const scene = document.getElementById('scene');
+        const container = document.getElementById('container');
+        const viewport = document.getElementById('viewport');
+        const message = document.getElementById('message');
+
+        // DEBUG: Global click handler to see what's being clicked
+        document.addEventListener('click', function(e) {
+            console.log('GLOBAL CLICK DETECTED');
+            console.log('Clicked element:', e.target);
+            console.log('Element class:', e.target.className);
+            console.log('Element id:', e.target.id);
+            console.log('Animation state:', animationState);
+        });
+
+        // Click to start growing animation
+        flowerpot.addEventListener('click', startGrowing);
+        seedling.addEventListener('click', startGrowing);
+
+        function startGrowing() {
+            if (animationState !== 'initial') return;
+            animationState = 'growing';
+            
+            // Remove click listeners and hide click text
+            flowerpot.style.cursor = 'default';
+            seedling.style.cursor = 'default';
+            const potClickText = document.getElementById('potClickText');
+            if (potClickText) potClickText.style.display = 'none';
+            
+            // Create and show rain cloud
+            const rainCloud = document.createElement('div');
+            rainCloud.className = 'rain-cloud';
+            rainCloud.innerHTML = `
+                <div class="raindrop"></div>
+                <div class="raindrop"></div>
+                <div class="raindrop"></div>
+                <div class="raindrop"></div>
+                <div class="raindrop"></div>
+            `;
+            seedling.appendChild(rainCloud);
+            
+            // Pan cloud in from left
+            setTimeout(() => {
+                rainCloud.classList.add('pan-in');
+            }, 100);
+            
+            // After cloud finishes panning in, start raining
+            setTimeout(() => {
+                rainCloud.classList.add('raining');
+            }, 1600); // After 1.5s pan-in animation
+            
+            // Stop rain and pan out after 2 seconds of rain
+            setTimeout(() => {
+                rainCloud.classList.remove('raining');
+                rainCloud.classList.remove('pan-in');
+                rainCloud.classList.add('pan-out');
+                
+                // Start growing after cloud starts panning out
+                setTimeout(() => {
+                    rainCloud.remove();
+                }, 1500);
+                
+                // Start stem growth
+                stem.classList.add('growing');
+                
+                // Pan camera upward
+                setTimeout(() => {
+                    scene.style.transform = 'translateX(-50%) translateY(-80px)';
+                }, 200);
+                
+                // Add dynamic leaves during growth
+                addDynamicLeaves();
+                
+                // Bloom the rose directly after stem grows (no bud stage)
+                setTimeout(() => {
+                    bloomRose();
+                }, 2000); // Match new 2s stem growth time
+            }, 3600); // 1.6s (pan + settle) + 2s rain
+        }
+
+        function addDynamicLeaves() {
+            const leafPositions = [40, 80];
+            
+            leafPositions.forEach((position, index) => {
+                setTimeout(() => {
+                    const isLeft = index % 2 === 0;
+                    const leaf = document.createElement('div');
+                    leaf.className = 'dynamic-leaf';
+                    leaf.style.bottom = position + 'px';
+                    
+                    if (isLeft) {
+                        leaf.style.left = '-23px';
+                        leaf.style.transform = 'rotate(-45deg)';
+                    } else {
+                        leaf.style.right = '-23px';
+                        leaf.style.transform = 'rotate(45deg) scaleX(-1)';
+                    }
+                    
+                    stem.appendChild(leaf);
+                    
+                    setTimeout(() => {
+                        leaf.classList.add('show');
+                    }, 50);
+                }, 500 + index * 300); // Added 500ms delay before first leaf
+            });
+        }
+
+        function bloomRose() {
+            const rose = document.createElement('div');
+            rose.className = 'rose';
+            rose.id = 'main-rose';
+            rose.innerHTML = `
+                <div class="flower__leaf flower__leaf--1"></div>
+                <div class="flower__leaf flower__leaf--2"></div>
+                <div class="flower__leaf flower__leaf--3"></div>
+                <div class="flower__leaf flower__leaf--4"></div>
+                <div class="flower__leaf flower__leaf--5"></div>
+                <div class="flower__leaf flower__leaf--6"></div>
+                <div class="flower__leaf flower__leaf--7"></div>
+            `;
+            stem.appendChild(rose);
+            
+            console.log('Rose created and added to stem');
+            
+            // Create a clickable overlay that sits on top of the petals
+            const clickOverlay = document.createElement('div');
+            clickOverlay.style.position = 'absolute';
+            clickOverlay.style.top = '0';
+            clickOverlay.style.left = '0';
+            clickOverlay.style.width = '100%';
+            clickOverlay.style.height = '100%';
+            clickOverlay.style.cursor = 'pointer';
+            clickOverlay.style.zIndex = '999';
+            clickOverlay.style.pointerEvents = 'auto';
+            clickOverlay.style.background = 'rgba(255, 0, 0, 0.1)'; // DEBUG: visible overlay
+            rose.appendChild(clickOverlay);
+            
+            console.log('Click overlay added');
+            
+            // Create "click the flower" text OUTSIDE the rose, in the viewport
+            const clickText = document.createElement('div');
+            clickText.className = 'click-text rose-click';
+            clickText.textContent = 'click the flower';
+            clickText.id = 'roseClickText';
+            viewport.appendChild(clickText);
+            
+            setTimeout(() => {
+                rose.classList.add('bloom');
+                animationState = 'bloomed';
+                
+                // Make rose clickable after bloom animation completes
+                setTimeout(() => {
+                    console.log('Adding click listeners to rose');
+                    clickOverlay.addEventListener('click', function(e) {
+                        console.log('Click overlay clicked!');
+                        e.stopPropagation();
+                        startBouquetSequence();
+                    });
+                    rose.addEventListener('click', function(e) {
+                        console.log('Rose clicked!');
+                        e.stopPropagation();
+                        startBouquetSequence();
+                    });
+                    
+                    console.log('Rose should be clickable now');
+                }, 1600); // After 1.5s bloom animation
+            }, 100);
+        }
+
+        function startBouquetSequence() {
+            if (animationState !== 'bloomed') return;
+            animationState = 'bouquet';
+            
+            // Play background music
+            const bgMusic = document.getElementById('bgMusic');
+            if (bgMusic) {
+                bgMusic.play().catch(err => {
+                    console.log('Audio play failed:', err);
+                });
+            }
+            
+            const mainRose = document.getElementById('main-rose');
+            mainRose.style.cursor = 'default';
+            const roseClickText = document.getElementById('roseClickText');
+            if (roseClickText) roseClickText.style.display = 'none';
+            
+            // Show scissors
+            setTimeout(() => {
+                showScissorsAndCut();
+            }, 1000);
+        }
+
+        function showScissorsAndCut() {
+            const scissors = document.createElement('div');
+            scissors.className = 'scissors';
+            scissors.style.bottom = '80px'; // 80px = floating rose stem height
+            scissors.style.left = '50%';
+            scissors.style.transform = 'translateX(-50%)';
+            scissors.innerHTML = `
+                <div class="blade"></div>
+                <div class="blade"></div>
+                <div class="handle"></div>
+                <div class="handle"></div>
+            `;
+            scene.appendChild(scissors);
+            
+            setTimeout(() => {
+                scissors.classList.add('appear');
+            }, 100);
+            
+            // Cut animation
+            setTimeout(() => {
+                scissors.classList.add('cutting');
+                
+                setTimeout(() => {
+                    scissors.style.opacity = '0';
+                    floatRoseToCenter();
+                }, 500);
+            }, 1500);
+        }
+
+        function floatRoseToCenter() {
+            // Create first floating rose
+            const firstRose = createFloatingRose();
+            firstRose.classList.add('center-flower'); // Mark as center flower
+            viewport.appendChild(firstRose);
+            
+            // Get exact position of the main rose
+            const mainRose = document.getElementById('main-rose');
+            const mainRoseRect = mainRose.getBoundingClientRect();
+            
+            // Hide main flower IMMEDIATELY (before stem and leaves)
+            mainRose.style.opacity = '0';
+            
+            // Position floating rose exactly where main rose is, but lower to account for stem
+            firstRose.style.left = (mainRoseRect.left + mainRoseRect.width / 2) + 'px';
+            firstRose.style.top = (mainRoseRect.top + mainRoseRect.height / 2 + 40) + 'px'; // Lower by 40px
+            firstRose.style.transform = 'translateX(-50%) translateY(-50%)';
+            firstRose.style.opacity = '1';
+            
+            // Hide stem and leaves after a short delay
+            setTimeout(() => {
+                scene.style.opacity = '0';
+            }, 300);
+            
+            // Start background transition immediately when rose starts floating
+            container.classList.add('red-bg');
+            
+            // Float to center
+            setTimeout(() => {
+                firstRose.style.transition = 'all 1.5s ease';
+                firstRose.style.left = '50%';
+                firstRose.style.top = '50%';
+                firstRose.style.transform = 'translateX(-50%) translateY(-50%)';
+            }, 200);
+            
+            // Start adding more roses
+            setTimeout(() => {
+                addRosesToBouquet(firstRose);
+            }, 1700);
+        }
+
+        function createFloatingRose() {
+            const rose = document.createElement('div');
+            rose.className = 'floating-rose';
+            rose.innerHTML = `
+                <div class="rose-head">
+                    <div class="flower__leaf flower__leaf--1"></div>
+                    <div class="flower__leaf flower__leaf--2"></div>
+                    <div class="flower__leaf flower__leaf--3"></div>
+                    <div class="flower__leaf flower__leaf--4"></div>
+                    <div class="flower__leaf flower__leaf--5"></div>
+                    <div class="flower__leaf flower__leaf--6"></div>
+                    <div class="flower__leaf flower__leaf--7"></div>
+                </div>
+                <div class="mini-stem"></div>
+            `;
+            rose.style.position = 'absolute';
+            return rose;
+        }
+
+        const roses = [];
+
+        function addRosesToBouquet(firstRose) {
+            roses.push(firstRose);
+            
+            // Add 15 more roses (total 16 with first rose)
+            const roseSequence = [
+                { side: 'left', delay: 0 },
+                { side: 'right', delay: 300 },
+                { side: 'left', delay: 600 },
+                { side: 'right', delay: 900 },
+                { side: 'left', delay: 1200 },
+                { side: 'right', delay: 1500 },
+                { side: 'left', delay: 1800 },
+                { side: 'right', delay: 2100 },
+                { side: 'left', delay: 2400 },
+                { side: 'right', delay: 2700 },
+                { side: 'left', delay: 3000 },
+                { side: 'right', delay: 3300 },
+                { side: 'left', delay: 3600 },
+                { side: 'right', delay: 3900 },
+                { side: 'left', delay: 4200 }
+            ];
+            
+            roseSequence.forEach((seq, index) => {
+                setTimeout(() => {
+                    addSlidingRose(seq.side, index + 1);
+                }, seq.delay);
+            });
+            
+            // After all roses finish sliding to circle, gather them into bouquet
+            setTimeout(() => {
+                gatherIntoBouquet();
+            }, 5500);
+        }
+
+        function addSlidingRose(side, index) {
+            const rose = createFloatingRose();
+            viewport.appendChild(rose);
+            roses.push(rose);
+            
+            const startX = side === 'left' ? '-100px' : 'calc(100% + 100px)';
+            
+            rose.style.left = startX;
+            rose.style.top = '50%';
+            rose.style.opacity = '1';
+            
+            setTimeout(() => {
+                rose.style.transition = 'all 0.8s ease';
+                
+                // Go directly to circle position
+                const totalOuterRoses = 15; // Total sliding roses
+                const angle = ((index - 1) / totalOuterRoses) * Math.PI * 2; // Full circle
+                const radius = 200; // Distance from center
+                
+                const offsetX = Math.cos(angle) * radius;
+                const offsetY = Math.sin(angle) * radius;
+                
+                // Get viewport center
+                const centerX = window.innerWidth / 2;
+                const centerY = window.innerHeight / 2;
+                
+                rose.style.left = (centerX + offsetX) + 'px';
+                rose.style.top = (centerY + offsetY) + 'px';
+                rose.style.transform = 'translateX(-50%) translateY(-50%) scale(0.8)';
+                rose.style.zIndex = 10;
+            }, 50);
+        }
+
+        function createBouquetWrapper() {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'bouquet-wrapper';
+            wrapper.innerHTML = `
+                <div class="bouquet-back">
+                    <div class="back-flap-left"></div>
+                    <div class="back-flap-right"></div>
+                </div>
+                <div class="bouquet-front">
+                    <div class="front-flap-left"></div>
+                    <div class="front-flap-right"></div>
+                </div>
+                <div class="ribbon"></div>
+            `;
+            viewport.appendChild(wrapper);
+            
+            setTimeout(() => {
+                wrapper.classList.add('rise');
+                
+                // Gather roses into bouquet
+                setTimeout(() => {
+                    gatherRosesIntoBouquet(wrapper);
+                }, 500);
+            }, 100);
+        }
+
+        function arrangeRosesInCircle() {
+            roses.forEach((rose, index) => {
+                setTimeout(() => {
+                    rose.style.transition = 'all 1.5s ease';
+                    
+                    if (index === 0) {
+                        // First rose stays at center
+                        rose.style.left = '50%';
+                        rose.style.top = '50%';
+                        rose.style.transform = 'translateX(-50%) translateY(-50%) scale(1)';
+                        rose.style.zIndex = 50;
+                    } else {
+                        // Arrange other 15 roses in a circle around center
+                        const totalOuterRoses = roses.length - 1; // 15 roses
+                        const roseIndex = index - 1; // 0-14
+                        const angle = (roseIndex / totalOuterRoses) * Math.PI * 2; // Full circle
+                        const radius = 200; // Distance from center
+                        
+                        const offsetX = Math.cos(angle) * radius;
+                        const offsetY = Math.sin(angle) * radius;
+                        
+                        // Get viewport center
+                        const centerX = window.innerWidth / 2;
+                        const centerY = window.innerHeight / 2;
+                        
+                        rose.style.left = (centerX + offsetX) + 'px';
+                        rose.style.top = (centerY + offsetY) + 'px';
+                        rose.style.transform = 'translateX(-50%) translateY(-50%) scale(0.8)';
+                        rose.style.zIndex = 10;
+                    }
+                }, index * 60);
+            });
+            
+            // Show message after circle is formed
+            setTimeout(() => {
+                message.classList.add('show');
+            }, roses.length * 60 + 1000);
+        }
+
+        function gatherIntoBouquet() {
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            
+            roses.forEach((rose, index) => {
+                setTimeout(() => {
+                    rose.style.transition = 'all 1.2s ease';
+                    
+                    if (index === 0) {
+                        // Center rose stays in middle with highest z-index, no tilt
+                        rose.style.left = centerX + 'px';
+                        rose.style.top = centerY + 'px';
+                        rose.style.transform = 'translateX(-50%) translateY(-50%) rotate(0deg)';
+                        rose.style.zIndex = 200; // Highest z-index
+                    } else {
+                        // Number the flowers 1-15
+                        const flowerNumber = index; // index 1-15 for the floating flowers
+                        
+                        // Calculate tilt angle first
+                        const minAngle = -60;
+                        const maxAngle = 60;
+                        const angleRange = maxAngle - minAngle;
+                        const angle = minAngle + ((index - 1) / 14) * angleRange; // 14 gaps for 15 roses
+                        const tiltVariation = (Math.random() - 0.5) * 8; // ±4 degrees variation
+                        const finalTilt = angle + tiltVariation;
+                        
+                        // Position flower in the direction it's tilting
+                        const angleRad = (finalTilt - 90) * (Math.PI / 180); // -90 to point upward
+                        
+                        let spreadDistance;
+                        let zIndex;
+                        if (flowerNumber % 2 === 1) {
+                            // ODD numbered flowers (1, 3, 5, 7, 9, 11, 13, 15) - farther, lower z-index
+                            const baseDistance = 60;
+                            const distanceVariation = 20 + (Math.random() * 30); // Random 20-50px variation
+                            spreadDistance = baseDistance + distanceVariation;
+                            zIndex = 50; // Lower z-index (behind)
+                        } else {
+                            // EVEN numbered flowers (2, 4, 6, 8, 10, 12, 14) - closer, higher z-index
+                            const baseDistance = 35;
+                            const distanceVariation = 10 + (Math.random() * 15); // Random 10-25px variation
+                            spreadDistance = baseDistance + distanceVariation;
+                            zIndex = 100; // Higher z-index (in front)
+                        }
+                        
+                        const offsetX = Math.cos(angleRad) * spreadDistance;
+                        const offsetY = Math.sin(angleRad) * spreadDistance;
+                        
+                        rose.style.left = (centerX + offsetX) + 'px';
+                        rose.style.top = (centerY + offsetY) + 'px';
+                        rose.style.transform = `translateX(-50%) translateY(-50%) rotate(${finalTilt}deg) scale(0.9)`;
+                        rose.style.zIndex = zIndex;
+                    }
+                }, index * 50);
+            });
+            
+            // Add bowtie after roses gather
+            setTimeout(() => {
+                createBowtie();
+            }, roses.length * 50 + 1000);
+        }
+
+        function createBowtie() {
+            const bowtie = document.createElement('div');
+            bowtie.className = 'bowtie';
+            bowtie.innerHTML = `
+                <div class="bowtie-left"></div>
+                <div class="bowtie-right"></div>
+                <div class="bowtie-knot"></div>
+                <div class="bowtie-ribbon"></div>
+                <div class="bowtie-ribbon"></div>
+            `;
+            viewport.appendChild(bowtie);
+            
+            setTimeout(() => {
+                bowtie.classList.add('show');
+            }, 100);
+            
+            // Show message after bowtie appears
+            setTimeout(() => {
+                message.classList.add('show');
+                
+                // After message appears, wrap everything and move bouquet down
+                setTimeout(() => {
+                    // Create a container for the entire bouquet
+                    const bouquetContainer = document.createElement('div');
+                    bouquetContainer.id = 'bouquet-container';
+                    bouquetContainer.style.position = 'absolute';
+                    bouquetContainer.style.top = '0';
+                    bouquetContainer.style.left = '0';
+                    bouquetContainer.style.width = '100%';
+                    bouquetContainer.style.height = '100%';
+                    bouquetContainer.style.transition = 'transform 2s ease';
+                    bouquetContainer.style.pointerEvents = 'none';
+                    viewport.appendChild(bouquetContainer);
+                    
+                    // Move all roses into the container
+                    roses.forEach(rose => {
+                        bouquetContainer.appendChild(rose);
+                    });
+                    
+                    // Move bowtie into the container
+                    bouquetContainer.appendChild(bowtie);
+                    
+                    // Now move the entire container down
+                    setTimeout(() => {
+                        bouquetContainer.style.transform = 'translateY(40vh)';
+                        
+                        // Show letter box after movement
+                        setTimeout(() => {
+                            const letterBox = document.getElementById('letterBox');
+                            letterBox.classList.add('show');
+                        }, 1000);
+                    }, 100);
+                }, 3000);
+            }, 1000);
+        }
+
+        function gatherRosesIntoBouquet(wrapper) {
+            const wrapperRect = wrapper.getBoundingClientRect();
+            
+            roses.forEach((rose, index) => {
+                setTimeout(() => {
+                    rose.style.transition = 'all 1s ease';
+                    
+                    // Create dome/circular bouquet arrangement with rotations
+                    // Flowers should be z-indexed between back (z:1) and front (z:100)
+                    const totalRoses = roses.length;
+                    
+                    // Random-ish rotations for natural look
+                    const rotations = [5, -8, 12, -15, 10, -5, 18, -12, 7, -10];
+                    
+                    let radius, offsetY, scale, zIndex;
+                    
+                    if (index < 4) {
+                        // Inner/front layer - 4 roses
+                        const angle = (index / 4) * Math.PI * 2;
+                        radius = 35;
+                        offsetY = -20; // Raised up
+                        scale = 0.85;
+                        zIndex = 50; // Behind front wrapper (z:100)
+                        const offsetX = Math.cos(angle) * radius;
+                        const layerY = Math.sin(angle) * radius * 0.5;
+                        
+                        rose.style.left = (wrapperRect.left + wrapperRect.width / 2 + offsetX) + 'px';
+                        rose.style.top = (wrapperRect.top + offsetY + layerY) + 'px';
+                        rose.style.transform = `translateX(-50%) translateY(-50%) scale(${scale}) rotate(${rotations[index]}deg)`;
+                        rose.style.zIndex = zIndex;
+                    } else if (index < 7) {
+                        // Middle layer - 3 roses
+                        const middleIndex = index - 4;
+                        const angle = (middleIndex / 3) * Math.PI * 2 + Math.PI / 6;
+                        radius = 55;
+                        offsetY = -10; // Raised up
+                        scale = 0.75;
+                        zIndex = 30; // Behind front wrapper
+                        const offsetX = Math.cos(angle) * radius;
+                        const layerY = Math.sin(angle) * radius * 0.5;
+                        
+                        rose.style.left = (wrapperRect.left + wrapperRect.width / 2 + offsetX) + 'px';
+                        rose.style.top = (wrapperRect.top + offsetY + layerY) + 'px';
+                        rose.style.transform = `translateX(-50%) translateY(-50%) scale(${scale}) rotate(${rotations[index]}deg)`;
+                        rose.style.zIndex = zIndex;
+                    } else {
+                        // Outer/back layer - 3 roses
+                        const outerIndex = index - 7;
+                        const angle = (outerIndex / 3) * Math.PI * 2;
+                        radius = 70;
+                        offsetY = 0; // Raised up
+                        scale = 0.7;
+                        zIndex = 10; // Behind front wrapper, in front of back wrapper
+                        const offsetX = Math.cos(angle) * radius;
+                        const layerY = Math.sin(angle) * radius * 0.5;
+                        
+                        rose.style.left = (wrapperRect.left + wrapperRect.width / 2 + offsetX) + 'px';
+                        rose.style.top = (wrapperRect.top + offsetY + layerY) + 'px';
+                        rose.style.transform = `translateX(-50%) translateY(-50%) scale(${scale}) rotate(${rotations[index]}deg)`;
+                        rose.style.zIndex = zIndex;
+                    }
+                }, index * 80);
+            });
+            
+            // Show message
+            setTimeout(() => {
+                message.classList.add('show');
+            }, roses.length * 80 + 1000);
+        }
+    </script>
+</body>
+</html>
