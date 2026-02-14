@@ -937,6 +937,108 @@
         .bowtie-ribbon:nth-child(5) {
             transform: translateX(-50%) rotate(8deg);
         }
+
+        /* Mobile responsiveness */
+        @media screen and (max-width: 768px) {
+            /* Make message smaller and ensure it's fully visible */
+            .message {
+                font-size: 24px;
+                top: 10vh;
+                padding: 0 20px;
+                text-align: center;
+                white-space: normal;
+                max-width: 90%;
+            }
+
+            /* Make click text larger and more visible */
+            .click-text {
+                font-size: 28px;
+                text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.9);
+            }
+
+            .click-text.pot-click {
+                bottom: 100px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .click-text.rose-click {
+                position: fixed !important;
+                top: 40% !important;
+                left: 50% !important;
+                right: auto !important;
+                transform: translate(-50%, -50%) !important;
+            }
+
+            /* Adjust letter box for mobile */
+            .letter-box {
+                top: 35vh;
+                width: 90%;
+                max-height: 45vh;
+                padding: 20px;
+            }
+
+            .letter-text {
+                font-size: 16px;
+            }
+
+            /* Make scene elements more visible on mobile */
+            .flowerpot {
+                width: 100px;
+                height: 70px;
+            }
+
+            .seedling {
+                bottom: 70px;
+            }
+
+            /* Adjust scene positioning for mobile - less camera pan upward */
+            #scene {
+                bottom: 10vh;
+            }
+
+            /* Adjust stem growth for mobile screens */
+            .stem.growing {
+                animation: growStemMobile 2s ease-out forwards;
+            }
+
+            @keyframes growStemMobile {
+                to {
+                    height: 100px;
+                }
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            /* Extra small phones */
+            .message {
+                font-size: 20px;
+                top: 8vh;
+            }
+
+            .click-text {
+                font-size: 24px;
+            }
+
+            .letter-text {
+                font-size: 14px;
+            }
+
+            /* Even less stem growth on very small screens */
+            .stem.growing {
+                animation: growStemSmall 2s ease-out forwards;
+            }
+
+            @keyframes growStemSmall {
+                to {
+                    height: 80px;
+                }
+            }
+
+            #scene {
+                bottom: 15vh;
+            }
+        }
     </style>
 </head>
 <body>
@@ -971,7 +1073,7 @@
                 <p>I'm still learning. I'm still growing. But I promise you, I am trying. I want to become better, not just for myself, but for us. For our future. For the kind of love we talk about at 2 a.m. when everything feels quiet and honest.
 Please continue walking beside me. Support me the way I will always support you. Let's keep building something steady, something real. Not perfect, but ours.</p>
                 
-                <p>I love you very, very much, Lalove. More than I can properly put into words. Happy Valentine's Day. ❤️</p>
+                <p>I love you very, very much, Lalove. More than I can properly put into words. Happy Valentine's Day. ❤️❤️❤️❤️❤️❤️❤️</p>
             </div>
         </div>
         
@@ -1050,9 +1152,11 @@ Please continue walking beside me. Support me the way I will always support you.
                 // Start stem growth
                 stem.classList.add('growing');
                 
-                // Pan camera upward
+                // Pan camera upward - less on mobile
                 setTimeout(() => {
-                    scene.style.transform = 'translateX(-50%) translateY(-80px)';
+                    const isMobile = window.innerWidth <= 768;
+                    const panAmount = isMobile ? (window.innerWidth <= 480 ? -40 : -60) : -80;
+                    scene.style.transform = `translateX(-50%) translateY(${panAmount}px)`;
                 }, 200);
                 
                 // Add dynamic leaves during growth
@@ -1066,7 +1170,7 @@ Please continue walking beside me. Support me the way I will always support you.
         }
 
         function addDynamicLeaves() {
-            const leafPositions = [40, 80];
+            const leafPositions = [40]; // Only one leaf at 40px, removed the 80px leaf
             
             leafPositions.forEach((position, index) => {
                 setTimeout(() => {
@@ -1219,6 +1323,10 @@ Please continue walking beside me. Support me the way I will always support you.
             // Hide main flower IMMEDIATELY (before stem and leaves)
             mainRose.style.opacity = '0';
             
+            // Get viewport center for all calculations
+            const viewportCenterX = window.innerWidth / 2;
+            const viewportCenterY = window.innerHeight / 2;
+            
             // Position floating rose exactly where main rose is, but lower to account for stem
             firstRose.style.left = (mainRoseRect.left + mainRoseRect.width / 2) + 'px';
             firstRose.style.top = (mainRoseRect.top + mainRoseRect.height / 2 + 40) + 'px'; // Lower by 40px
@@ -1233,11 +1341,11 @@ Please continue walking beside me. Support me the way I will always support you.
             // Start background transition immediately when rose starts floating
             container.classList.add('red-bg');
             
-            // Float to center
+            // Float to center using viewport center
             setTimeout(() => {
                 firstRose.style.transition = 'all 1.5s ease';
-                firstRose.style.left = '50%';
-                firstRose.style.top = '50%';
+                firstRose.style.left = viewportCenterX + 'px';
+                firstRose.style.top = viewportCenterY + 'px';
                 firstRose.style.transform = 'translateX(-50%) translateY(-50%)';
             }, 200);
             
@@ -1307,10 +1415,14 @@ Please continue walking beside me. Support me the way I will always support you.
             viewport.appendChild(rose);
             roses.push(rose);
             
-            const startX = side === 'left' ? '-100px' : 'calc(100% + 100px)';
+            // Get viewport center
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            
+            const startX = side === 'left' ? '-100px' : (window.innerWidth + 100) + 'px';
             
             rose.style.left = startX;
-            rose.style.top = '50%';
+            rose.style.top = centerY + 'px';
             rose.style.opacity = '1';
             
             setTimeout(() => {
@@ -1319,14 +1431,10 @@ Please continue walking beside me. Support me the way I will always support you.
                 // Go directly to circle position
                 const totalOuterRoses = 15; // Total sliding roses
                 const angle = ((index - 1) / totalOuterRoses) * Math.PI * 2; // Full circle
-                const radius = 200; // Distance from center
+                const radius = Math.min(200, window.innerWidth * 0.35); // Responsive radius
                 
                 const offsetX = Math.cos(angle) * radius;
                 const offsetY = Math.sin(angle) * radius;
-                
-                // Get viewport center
-                const centerX = window.innerWidth / 2;
-                const centerY = window.innerHeight / 2;
                 
                 rose.style.left = (centerX + offsetX) + 'px';
                 rose.style.top = (centerY + offsetY) + 'px';
